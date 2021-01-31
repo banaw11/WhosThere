@@ -17,6 +17,7 @@ namespace API.Extensions
             services.AddSingleton<OnlineTracker>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserRepository,UserRepository>();
+            services.AddScoped<IChatRepository, ChatRepository>();
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
              services.AddDbContext<DataContext>(options =>
             {

@@ -12,6 +12,7 @@ export class OnlineUserService {
   private hubConnection: HubConnection;
   private onlineUsersSource = new BehaviorSubject<number[]>([]);
   onlineUsers$ = this.onlineUsersSource.asObservable();
+  mateId : number;
 
   constructor() { }
 
@@ -25,7 +26,17 @@ export class OnlineUserService {
       
       this.hubConnection.on("GetOnlineUsers", (iDs : number[]) => {
         this.onlineUsersSource.next(iDs);
-      })
+      });
+
+      this.hubConnection.on("FittedMate", (id: number) =>{
+        this.mateId = id;
+        console.log("ID= "+this.mateId);
+      });
+
+      this.hubConnection.on("MateDisconnected", () =>{
+        console.log("Mate ended chat");
+      });
+
   }
 
   stopHubConnection(){

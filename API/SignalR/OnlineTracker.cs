@@ -10,7 +10,7 @@ namespace API.SignalR
 {
     public class OnlineTracker
     {
-        private static readonly Dictionary<int, List<string>> OnlineUsers = new Dictionary<int, List<string>>();
+        private static readonly Dictionary<int, string> OnlineUsers = new Dictionary<int, string>();
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
         public OnlineTracker(IServiceScopeFactory serviceScopeFactory)
@@ -24,11 +24,11 @@ namespace API.SignalR
             {
                 if (OnlineUsers.ContainsKey(userId))
                 {
-                    OnlineUsers[userId].Add(connectionId);
+                    OnlineUsers[userId]=connectionId;
                 }
                 else
                 {
-                    OnlineUsers.Add(userId, new List<string> { connectionId });
+                    OnlineUsers.Add(userId,  connectionId );
                 }
             }
 
@@ -41,11 +41,7 @@ namespace API.SignalR
             {
                 if (!OnlineUsers.ContainsKey(userId)) return Task.CompletedTask;
 
-                OnlineUsers[userId].Remove(connectionId);
-                if(OnlineUsers[userId].Count == 0)
-                {
                     OnlineUsers.Remove(userId);
-                }
             }
             var result = Task.FromResult(OnlineUsers);
             if (result.IsCompletedSuccessfully)
@@ -70,5 +66,15 @@ namespace API.SignalR
             }
             return Task.FromResult(onlineUsers);
         }
+
+        public string GetConnectionId(int userId)
+        {
+            lock (OnlineUsers)
+            {
+                return OnlineUsers[userId];
+            }
+        }
+
+        
     }
 }

@@ -29,8 +29,7 @@ myForm = this.fb.group({
     gender: ['', Validators.required],
     selectedGender: [''],
     location: [''],
-    ageFrom: [''],
-    ageTo: [''],
+    minAge: [''],
   })
 
   join(){
