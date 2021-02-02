@@ -15,6 +15,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { HttpClientModule } from '@angular/common/http';
 import { ChatComponent } from './components/chat/chat.component';
 import { HomeComponent } from './home/home.component';
+import { NbThemeModule, NbSidebarModule, NbLayoutModule, NbButtonModule, NbBadgeModule, NbIconModule, NbActionsModule, NbCardModule, NbRadioModule, NbSelectModule } from '@nebular/theme';
+import { NbEvaIconsModule } from '@nebular/eva-icons';
 
 
 @NgModule({
@@ -36,14 +38,27 @@ import { HomeComponent } from './home/home.component';
     MatIconModule,
     MatBadgeModule,
     MatSelectModule,
-    HttpClientModule
+    HttpClientModule,
+    NbSidebarModule,
+    NbButtonModule,
+    NbLayoutModule,
+    NbThemeModule.forRoot({ name: 'cosmic' }),
+    NbEvaIconsModule,
+    NbBadgeModule,
+    NbEvaIconsModule,
+    NbIconModule,
+    NbActionsModule,
+    NbCardModule,
+    NbRadioModule,
+    NbSelectModule
   ],
   exports: [
     MatFormFieldModule,
     MatRadioModule,
     MatIconModule,
     MatBadgeModule,
-    HttpClientModule
+    HttpClientModule,
+    NbThemeModule
   ],
   providers: [],
   bootstrap: [AppComponent]
