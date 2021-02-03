@@ -12,6 +12,10 @@ export class OnlineUserService {
   private hubConnection: HubConnection;
   private onlineUsersSource = new BehaviorSubject<number[]>([]);
   onlineUsers$ = this.onlineUsersSource.asObservable();
+  private fittedMateSource = new BehaviorSubject<number>(null);
+  fittedMate$ = this.fittedMateSource.asObservable();
+  private fittingMateSource = new BehaviorSubject<boolean>(true);
+  fittingMate$ = this.fittingMateSource.asObservable();
   mateId : number;
 
   constructor() { }
@@ -30,6 +34,8 @@ export class OnlineUserService {
 
       this.hubConnection.on("FittedMate", (id: number) =>{
         this.mateId = id;
+        this.fittedMateSource.next(id);
+        this.fittingMateSource.next(false);
         console.log("ID= "+this.mateId);
       });
 

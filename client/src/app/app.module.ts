@@ -15,8 +15,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { HttpClientModule } from '@angular/common/http';
 import { ChatComponent } from './components/chat/chat.component';
 import { HomeComponent } from './home/home.component';
-import { NbThemeModule, NbSidebarModule, NbLayoutModule, NbButtonModule, NbBadgeModule, NbIconModule, NbActionsModule, NbCardModule, NbRadioModule, NbSelectModule } from '@nebular/theme';
+import { NbThemeModule, NbSidebarModule, NbLayoutModule, NbButtonModule, NbBadgeModule, NbIconModule, 
+  NbActionsModule, NbCardModule, NbRadioModule, NbSelectModule, NbInputModule, NbSpinnerModule, NbChatModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
+import { ChatCardComponent } from './components/chat/chat-card/chat-card.component';
 
 
 @NgModule({
@@ -26,6 +28,7 @@ import { NbEvaIconsModule } from '@nebular/eva-icons';
     JoinFormComponent,
     ChatComponent,
     HomeComponent,
+    ChatCardComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,7 +53,10 @@ import { NbEvaIconsModule } from '@nebular/eva-icons';
     NbActionsModule,
     NbCardModule,
     NbRadioModule,
-    NbSelectModule
+    NbSelectModule,
+    NbInputModule,
+    NbSpinnerModule,
+    NbChatModule
   ],
   exports: [
     MatFormFieldModule,

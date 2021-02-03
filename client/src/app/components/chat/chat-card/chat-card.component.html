@@ -1,0 +1,12 @@
+<nb-chat title="Chat with random person" status="primary" size="large">
+    <nb-chat-message *ngFor="let msg of messageService.messages"
+        [type]="msg.type"
+        [message]="msg.message"
+        [reply]="msg.reply"></nb-chat-message>
+        <!-- 
+        [sender]="msg.user.nick"
+        [date]="msg.date"
+        [avatar]="msg.user.avatar"> -->
+   <!--</nb-chat-message>--> 
+    <nb-chat-form (send)="sendMessage($event)"></nb-chat-form >
+</nb-chat>

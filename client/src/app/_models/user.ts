@@ -6,4 +6,6 @@ export interface User {
     ageTo: number;
     token: string;
     id: number;
+    avatar: string;
+    nick: string;
 }
