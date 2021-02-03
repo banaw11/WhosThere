@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { Message } from '../_models/message';
 import { User } from '../_models/user';
 
 @Injectable({
@@ -17,6 +19,7 @@ export class OnlineUserService {
   private fittingMateSource = new BehaviorSubject<boolean>(true);
   fittingMate$ = this.fittingMateSource.asObservable();
   mateId : number;
+  messages: Message[] = [];
 
   constructor() { }
 
@@ -41,13 +44,30 @@ export class OnlineUserService {
 
       this.hubConnection.on("MateDisconnected", () =>{
         console.log("Mate ended chat");
+        this.fittingMateSource.next(true);
+        this.fittedMateSource.next(null);
+        this.messages = [];
       });
 
+      this.hubConnection.on("GetMessage", (message: Message) =>{
+         this.messages.push(message);
+      })
+      
+  }
+
+  async sendMessage(message: Message){
+    message.reply = true;
+    this.messages.push(message);
+    return this.hubConnection.invoke("SendMessage", {recipientId: this.mateId, message: message.message })
+      .catch(error => console.log(error));
   }
 
   stopHubConnection(){
     if(this.hubConnection){
-      this.hubConnection.stop().catch(error => console.log(console.error()));
+      this.fittingMateSource.next(true);
+      this.fittedMateSource.next(null);
+      this.messages= [];
+      this.hubConnection.stop().catch(error => console.log(error));
     }
     
   }

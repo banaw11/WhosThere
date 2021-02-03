@@ -1,7 +1,7 @@
-import { stringify } from '@angular/compiler/src/util';
 import { Component, OnInit } from '@angular/core';
 import { Message } from 'src/app/_models/message';
-import { MessageService } from 'src/app/_services/message.service';
+import { User } from 'src/app/_models/user';
+import { OnlineUserService } from 'src/app/_services/online-user.service';
 
 @Component({
   selector: 'app-chat-card',
@@ -9,15 +9,16 @@ import { MessageService } from 'src/app/_services/message.service';
   styleUrls: ['./chat-card.component.css']
 })
 export class ChatCardComponent implements OnInit {
-
-  constructor(public messageService: MessageService) { }
+user : User;
+mateId: number;
+  constructor( public onlineUserService: OnlineUserService) { }
 
   ngOnInit(): void {
   }
 
   sendMessage(message: Message){
-    this.messageService.sendMessage(message);
+    this.onlineUserService.sendMessage(message);
   }
-    
+  
 
 }

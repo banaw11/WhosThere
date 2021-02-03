@@ -1,4 +1,5 @@
-﻿using API.Entities;
+﻿using API.DTOs;
+using API.Entities;
 using API.Extensions;
 using API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -91,6 +92,20 @@ namespace API.SignalR
             var callerId = Context.User.GetUserId();
             var caller = await _userRepository.GetUserByIdAsync(callerId);
             return await _chatRepository.GetGroupByNameAsync(caller.GroupName);
+        }
+
+        public async Task SendMessage(MessageDto messageDto)
+        {
+            var message = new MessageObj
+            {
+                Message = messageDto.Message,
+                Type = "text",
+                Reply = false,
+                Date = DateTime.Now,
+                User = await _userRepository.GetUserByIdAsync(Context.User.GetUserId())
+            };
+            var recipientConnection = _tracker.GetConnectionId(messageDto.RecipientId);
+            await Clients.Client(recipientConnection).SendAsync("GetMessage", message);
         }
 
     }
