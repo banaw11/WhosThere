@@ -1,40 +1,30 @@
 <form #joinForm="ngForm" class="form-horizontal"  (ngSubmit)='join() ' autocomplete="off">
-    <h2 class="text-center text-primary">Join to chat !</h2>
-    <hr/>
-    <div class="form-group">
-
-        <mat-label class="control-label" style="margin-right: 10px;">I am a :</mat-label>
-        <mat-radio-group id="gender" name="gender" [(ngModel)]="model.gender" required>
-            <mat-radio-button value="male" >Male</mat-radio-button>
-            <mat-radio-button value="female" class="ml-2">Female</mat-radio-button>
-        </mat-radio-group>
-        <hr/>
-        <mat-label class="control-label" style="margin-right: 10px;">Looking for :</mat-label>
-        <mat-radio-group name="selectedGender" [(ngModel)]="model.selectedGender">
-            <mat-radio-button value="male" >Male</mat-radio-button>
-            <mat-radio-button value="female" class="ml-2">Female</mat-radio-button>
-        </mat-radio-group>
-        <hr/>
-        <mat-form-field>
-            <mat-label class="control-label" style="margin-right: 10px;">From : </mat-label>
-                <mat-select name="location" [(ngModel)]="model.location" placeholder="">
-                    <mat-option *ngFor="let location of locations" [value]="location.value">
-                        {{location.viewValue}}
-                    </mat-option>
-                </mat-select>
-        </mat-form-field>
-        
-        <hr/>
-        <label class="control-label" style="margin-right: 10px;">Enter min age :</label>
-        <label>
-            <input type="text" name="minAge" [(ngModel)]="model.minAge" placeholder="Min age">
-        </label>
-        <hr/>
-        
-    </div>
-    <div class="form-group text-center">
-        <button class="btn btn-success" type="submit" [disabled]="!joinForm.valid">
-            Join
-        </button>
-    </div>
+    <nb-card accent="primary">
+        <nb-card-header class="text-center" ><h4>Join to chat !</h4></nb-card-header>
+        <nb-card-body>
+            <div class="form-group mr-2">
+                <label class="control-label" >I am a :</label>
+                <nb-radio-group class="" id="gender" name="gender" status="primary" [(ngModel)]="model.gender" required>
+                    <nb-radio value="male" >Male</nb-radio>
+                    <nb-radio value="female">Female</nb-radio>
+                </nb-radio-group>
+                
+                <label class="control-label mt-2" >Looking for :</label>
+                <nb-radio-group name="selectedGender" status="primary" [(ngModel)]="model.selectedGender">
+                    <nb-radio value="male" >Male</nb-radio>
+                    <nb-radio value="female" >Female</nb-radio>
+                </nb-radio-group>
+                
+                <nb-select class="mt-2" name="location" status="primary" [(ngModel)]="model.location" placeholder="From">
+                    <nb-option *ngFor="let location of locations" [value]="location.value">{{location.viewValue}}</nb-option>
+                </nb-select>
+               
+                <label class="control-label mt-2" style="margin-right: 10px;">Enter min age :</label>
+                <input nbInput shape="semi-round" status="primary" name="minAge" [(ngModel)]="model.minAge" placeholder="Min age">
+             </div>
+            </nb-card-body>
+        <nb-card-footer class="text-center">
+            <button class="form-group" nbButton shape="round" status="success" type="submit"  [disabled]="!joinForm.valid">Join</button>
+        </nb-card-footer>
+    </nb-card>
 </form>

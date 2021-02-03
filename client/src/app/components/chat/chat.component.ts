@@ -16,12 +16,18 @@ export class ChatComponent implements OnInit {
   this.onlineUserService.stopHubConnection();
 }
 onlineUsers: number[] = [];
+fittedMateId: number;
+check: boolean = true;
 
   constructor(public onlineUserService: OnlineUserService, private router: Router) {
     this.onlineUserService.onlineUsers$.pipe().subscribe((users:number[]) => {
       this.onlineUsers=users
       this.usersLoaded = Promise.resolve(true);
     });
+    this.onlineUserService.fittedMate$.pipe().subscribe((id: number)=>{
+      this.fittedMateId= id
+      this.check = false;
+    })
    }
 
   ngOnInit(): void {
