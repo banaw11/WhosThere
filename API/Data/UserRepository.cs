@@ -30,6 +30,12 @@ namespace API.Data
             _context.Users.Add(user);
         }
 
+        public void ChangStatus(AppUser user, bool status)
+        {
+            user.IsChatting = status;
+            Update(user);
+        }
+
         public async void CleanGroupName(int callerId)
         {
             var caller = await GetUserByIdAsync(callerId);

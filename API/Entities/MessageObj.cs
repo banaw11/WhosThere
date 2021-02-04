@@ -11,6 +11,7 @@ namespace API.Entities
         public string Type { get; set; }
         public bool Reply { get; set; }
         public DateTime Date { get; set; }
-        public AppUser User { get; set; }
+        public string Name { get; set; }
+        public string Avatar { get; set; }
     }
 }

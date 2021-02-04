@@ -1,11 +1,17 @@
-<nb-chat title="Chat with random person" status="primary" size="large">
+<nb-chat  title="Chat with random person" status="primary" size="large">
     <nb-chat-message *ngFor="let msg of onlineUserService.messages"
         [type]="msg.type"
         [message]="msg.message"
         [reply]="msg.reply"
-        [date]="msg.date">
-        [sender]="msg.user.nick"
-        [avatar]="msg.user.avatar">
+        [sender]="msg.name"
+        [avatar]="msg.avatar">
     </nb-chat-message>  
-    <nb-chat-form (send)="sendMessage($event)"></nb-chat-form >
+    <nb-chat-form (send)="sendMessage($event)" *ngIf='!(onlineUserService.mateDisconnected$ | async)'></nb-chat-form >
 </nb-chat>
+<div class="row mt-4 ml-2" *ngIf='onlineUserService.mateDisconnected$ | async'>
+    <nb-alert class="text-center col-12 col-sm-6 col-md-8" status="danger">Mate disconnected ! Do you want to chat with new one ?</nb-alert> 
+    <div class="col-6 col-md-4 ">
+        <button nbButton status="success" nbButton outline  size="small" shape="round" type="submit" (click)="joinToQueue()">Yes</button>
+        <button class="ml-2"nbButton status="danger" nbButton outline size="small" shape="round" (click)="userService.leave()" routerLink='/' routerLinkActive='active'>No</button>
+    </div>
+</div>

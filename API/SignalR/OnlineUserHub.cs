@@ -57,6 +57,7 @@ namespace API.SignalR
                 await Clients.Caller.SendAsync("FittedMate", chatMate.Id);
                 await Clients.Client(_tracker.GetConnectionId(chatMate.Id)).SendAsync("FittedMate", Context.User.GetUserId());
                 await CreateGroup(chatMate.Id);
+                await ChangeStatus(true);
             }
         }
         private async void SendDisconnectInfo(AppUser user)
@@ -96,16 +97,24 @@ namespace API.SignalR
 
         public async Task SendMessage(MessageDto messageDto)
         {
+            var user = await _userRepository.GetUserByIdAsync(Context.User.GetUserId());
             var message = new MessageObj
             {
                 Message = messageDto.Message,
                 Type = "text",
                 Reply = false,
                 Date = DateTime.Now,
-                User = await _userRepository.GetUserByIdAsync(Context.User.GetUserId())
+                Name = user.Nick,
+                Avatar = user.Avatar,
             };
             var recipientConnection = _tracker.GetConnectionId(messageDto.RecipientId);
             await Clients.Client(recipientConnection).SendAsync("GetMessage", message);
+        }
+        public async Task ChangeStatus(bool status)
+        {
+            var user = await _userRepository.GetUserByIdAsync(Context.User.GetUserId());
+            _userRepository.ChangStatus(user, status);
+            await _userRepository.SaveAllAsync();
         }
 
     }

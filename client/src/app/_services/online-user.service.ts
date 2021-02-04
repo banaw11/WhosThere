@@ -18,6 +18,8 @@ export class OnlineUserService {
   fittedMate$ = this.fittedMateSource.asObservable();
   private fittingMateSource = new BehaviorSubject<boolean>(true);
   fittingMate$ = this.fittingMateSource.asObservable();
+  mateDisconnectedSource = new BehaviorSubject<boolean>(false);
+  mateDisconnected$ = this.mateDisconnectedSource.asObservable();
   mateId : number;
   messages: Message[] = [];
 
@@ -39,14 +41,13 @@ export class OnlineUserService {
         this.mateId = id;
         this.fittedMateSource.next(id);
         this.fittingMateSource.next(false);
-        console.log("ID= "+this.mateId);
+        this.mateDisconnectedSource.next(false);
+        this.updateStatus();
       });
 
       this.hubConnection.on("MateDisconnected", () =>{
-        console.log("Mate ended chat");
-        this.fittingMateSource.next(true);
+        this.mateDisconnectedSource.next(true);
         this.fittedMateSource.next(null);
-        this.messages = [];
       });
 
       this.hubConnection.on("GetMessage", (message: Message) =>{
@@ -62,11 +63,21 @@ export class OnlineUserService {
       .catch(error => console.log(error));
   }
 
+  async joinToQueue(){
+    this.fittingMateSource.next(true);
+    this.messages = [];
+    return this.hubConnection.invoke("ChangeStatus", false).catch(error => console.log(error));
+  }
+
+  async updateStatus(){
+    return this.hubConnection.invoke("ChangeStatus", true).catch(error => console.log(error));
+  }
+
   stopHubConnection(){
     if(this.hubConnection){
       this.fittingMateSource.next(true);
       this.fittedMateSource.next(null);
-      this.messages= [];
+      this.messages = [];
       this.hubConnection.stop().catch(error => console.log(error));
     }
     

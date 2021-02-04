@@ -16,7 +16,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ChatComponent } from './components/chat/chat.component';
 import { HomeComponent } from './home/home.component';
 import { NbThemeModule, NbSidebarModule, NbLayoutModule, NbButtonModule, NbBadgeModule, NbIconModule, 
-  NbActionsModule, NbCardModule, NbRadioModule, NbSelectModule, NbInputModule, NbSpinnerModule, NbChatModule } from '@nebular/theme';
+  NbActionsModule, NbCardModule, NbRadioModule, NbSelectModule, NbInputModule, NbSpinnerModule, NbChatModule, NbAlertModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { ChatCardComponent } from './components/chat/chat-card/chat-card.component';
 
@@ -56,7 +56,8 @@ import { ChatCardComponent } from './components/chat/chat-card/chat-card.compone
     NbSelectModule,
     NbInputModule,
     NbSpinnerModule,
-    NbChatModule
+    NbChatModule,
+    NbAlertModule
   ],
   exports: [
     MatFormFieldModule,
