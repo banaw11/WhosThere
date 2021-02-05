@@ -1,9 +1,23 @@
-
-    <div class="container mr-auto row" >
-      <button nbButton (click)="backToHomePage()" routerLink='/' routerLinkActive='active' status="primary" >Who's There</button>
-      <div class="col-sm mt-2"  *ngIf='userService.curentUser$ | async' >
-        <mat-icon matBadge="{{(onlineUserService.onlineUsers$| async)?.length}}" matBadgeColor="warn">people</mat-icon>
-      </div>
+<div class="row" >
+  <div class="row col-md-3">
+    <button nbButton (click)="backToHomePage()" routerLink='/' routerLinkActive='active' status="primary" >Who's There</button>
+    <div class="col-sm-3 mt-2" *ngIf='userService.curentUser$ | async'  >
+      <mat-icon matBadge="{{(onlineUserService.onlineUsers$| async)?.length}}" matBadgeColor="warn">people</mat-icon>
     </div>
+  </div>
+  <div class="row col-md-3 offset-md-6" >
+    <nb-actions size="small">
+      <nb-action>
+        <nb-user name="Bartosz Nawrot" title="KnowAs"></nb-user>
+      </nb-action>
+      <nb-action icon="arrow-ios-downward" mat-button [mat-menu-trigger-for]="menu">
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item>Nick</button>
+          <button mat-menu-item>Avatar</button>
+        </mat-menu>
+      </nb-action>
+    </nb-actions>
+  </div>
+</div>
 
   

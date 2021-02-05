@@ -1,7 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { OnlineUserService } from '../_services/online-user.service';
 import { UserService } from '../_services/user.service';
@@ -14,6 +11,7 @@ import { UserService } from '../_services/user.service';
 export class NavComponent implements OnInit {
   apiUrl = environment.apiUrl;
 
+  userMenu = [{title: 'Nick'}, {title: 'Avatar'}];
 
   constructor(public onlineUserService: OnlineUserService, public userService: UserService) {
    }
@@ -23,6 +21,10 @@ export class NavComponent implements OnInit {
 
   backToHomePage(){
     this.userService.leave();
+  }
+
+  option(){
+    console.log("works");
   }
 
 }
