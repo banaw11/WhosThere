@@ -46,7 +46,7 @@ myForm = this.fb.group({
   }
  
   changeAvatar(url: string){
-    this.model.picture = url;
+    this.model.avatar = url;
   }
 
   addAge(){

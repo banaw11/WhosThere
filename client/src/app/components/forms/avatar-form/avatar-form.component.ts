@@ -22,13 +22,25 @@ avatars: Avatar[] ;
 
   changeAvatar(url: string){
     this.user.avatar=url;
-    this.userService.changeUserParams(this.user);
-    this.toastrService.show(
-      '',
-      'Avatar has been changed',
-      {position : NbGlobalPhysicalPosition.BOTTOM_RIGHT,
-         status: "primary", icon: "", duration: 1000}
-    );
+    this.userService.changeUserParams(this.user).pipe().subscribe((response: boolean) => {
+      if(response){
+        this.toastrService.show(
+          '',
+          'Avatar has been changed',
+          {position : NbGlobalPhysicalPosition.BOTTOM_RIGHT,
+             status: "primary", icon: "", duration: 1000}
+        );
+      }
+      else{
+        this.toastrService.show(
+          'Avatar has not been changed',
+          'Something went wrong',
+          {position : NbGlobalPhysicalPosition.BOTTOM_RIGHT,
+             status: "danger", icon: "warning-cirlce", duration: 1000}
+        );
+      }
+    });
+    
   }
 
 }

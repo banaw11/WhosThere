@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { User } from 'src/app/_models/user';
 import { UserService } from 'src/app/_services/user.service';
 
@@ -16,17 +17,7 @@ interface Locations {
 
 export class FiltersFormComponent implements OnInit {
   @Output("closePop") closePop = new EventEmitter<any>();
-  user: User = {
-    gender: "",
-    selectedGender: "",
-    location: "",
-    ageFrom: 0,
-    ageTo: 0,
-    token: "",
-    id: 0,
-    avatar: "",
-    nick: "",
-  };
+  user: User ;
   model: any;
   locations: Locations[] = [
     {value: '0', viewValue: 'All Country'},
@@ -36,28 +27,48 @@ export class FiltersFormComponent implements OnInit {
     {value: '4', viewValue: 'Location 4'},
   ]
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, private toastrService: NbToastrService) {
+   
+   }
 
   ngOnInit(): void {
+    this.userService.curentUser$.pipe().subscribe((user: User) => this.user = user);
   }
 
   addAge(){
-    if(this.user.ageFrom == null){
-      this.user.ageFrom = 1;
+    if(this.user.minAge == null){
+      this.user.minAge = 1;
     }
     else{
-      this.user.ageFrom++;
+      this.user.minAge++;
     }
   }
 
   subAge(){
-    if(this.user.ageFrom != null && this.user.ageFrom >0){
-      this.user.ageFrom--;
+    if(this.user.minAge != null && this.user.minAge >0){
+      this.user.minAge--;
     }
   }
 
   save(){
-    this.userService.changeUserParams(this.user);
+    this.userService.changePublicParams(this.user).pipe().subscribe((response:boolean) => {
+      if (response){
+        this.toastrService.show(
+          '',
+          'Filters have been changed',
+          {position : NbGlobalPhysicalPosition.BOTTOM_RIGHT,
+             status: "success", icon: "", duration: 1000}
+        );
+      }
+      else{
+        this.toastrService.show(
+          'Filters have not been changed',
+          'Something went wrong',
+          {position : NbGlobalPhysicalPosition.BOTTOM_RIGHT,
+             status: "warning", icon: "wargning-circle", duration: 1000}
+        );
+      }
+    });
     this.closePop.emit();
   }
 

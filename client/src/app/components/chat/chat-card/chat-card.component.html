@@ -3,7 +3,6 @@
         [type]="msg.type"
         [message]="msg.message"
         [reply]="msg.reply"
-        [sender]="mate?.nick"
         [avatar]="mate?.avatar">
     </nb-chat-message>  
     <nb-chat-form (send)="sendMessage($event)" *ngIf='!(onlineUserService.mateDisconnected$ | async)'></nb-chat-form >

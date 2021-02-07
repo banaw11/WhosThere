@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { Mate } from '../_models/mate';
 import { Message } from '../_models/message';
 import { User } from '../_models/user';
 
@@ -14,7 +14,7 @@ export class OnlineUserService {
   private hubConnection: HubConnection;
   private onlineUsersSource = new BehaviorSubject<number[]>([]);
   onlineUsers$ = this.onlineUsersSource.asObservable();
-  private fittedMateSource = new BehaviorSubject<User>(null);
+  private fittedMateSource = new BehaviorSubject<Mate>(null);
   fittedMate$ = this.fittedMateSource.asObservable();
   private fittingMateSource = new BehaviorSubject<boolean>(true);
   fittingMate$ = this.fittingMateSource.asObservable();
@@ -37,7 +37,7 @@ export class OnlineUserService {
         this.onlineUsersSource.next(iDs);
       });
 
-      this.hubConnection.on("FittedMate", (mate: User) =>{
+      this.hubConnection.on("FittedMate", (mate: Mate) =>{
         this.mateId = mate.id;
         this.fittedMateSource.next(mate);
         this.fittingMateSource.next(false);
@@ -52,6 +52,10 @@ export class OnlineUserService {
 
       this.hubConnection.on("GetMessage", (message: Message) =>{
          this.messages.push(message);
+      });
+
+      this.hubConnection.on("MateChangedParams", (mate: Mate) => {
+        this.fittedMateSource.next(mate);
       })
       
   }
@@ -71,6 +75,20 @@ export class OnlineUserService {
 
   async updateStatus(){
     return this.hubConnection.invoke("ChangeStatus", true).catch(error => console.log(error));
+  }
+
+  async updateParams(mate: User){
+    return this.hubConnection.invoke("ChangedParams", mate, this.mateId).catch(error => console.log(error));
+  }
+
+  sendChangeInfo(mate: User){
+    if(this.fittedMate$ != null){
+      this.updateParams(mate);
+    }
+  }
+
+  disconnectChat(){
+    
   }
 
   stopHubConnection(){

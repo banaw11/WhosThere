@@ -1,5 +1,7 @@
 <nb-card class="col-md-10 offset-md-1" *ngIf='usersLoaded | async'>
-    <nb-card-header [nbSpinner]='onlineUserService.fittingMate$ | async' nbSpinnerStatus="danger" nbSpinnerSize="large" nbSpinnerMessage="I'm looking for available people ..."></nb-card-header>
+    <nb-card-header [nbSpinner]='onlineUserService.fittingMate$ | async' nbSpinnerStatus="danger" nbSpinnerSize="large" nbSpinnerMessage="I'm looking for available people ...">
+        <nb-action class="offset-md-9" *ngIf='!(onlineUserService.fittingMate$ | async )' icon="close-square-outline" type="nbButton" (click)="disconnect()"></nb-action>
+    </nb-card-header>
     <nb-card-body >
         <app-chat-card [mate]="fittedMate" *ngIf='!(onlineUserService.fittingMate$ | async )'></app-chat-card>
     </nb-card-body>

@@ -39,8 +39,7 @@ namespace API.SignalR
         {
             lock (OnlineUsers)
             {
-                if (!OnlineUsers.ContainsKey(userId)) return Task.CompletedTask;
-
+                if (OnlineUsers.ContainsKey(userId)) 
                     OnlineUsers.Remove(userId);
             }
             var result = Task.FromResult(OnlineUsers);
@@ -51,9 +50,10 @@ namespace API.SignalR
                 var user = await _userRepository.GetUserByIdAsync(userId);
                 _userRepository.RemoveUser(user);
                 var resultDbContext = await _userRepository.SaveAllAsync();
-                if (!resultDbContext) return Task.FromResult<bool>(resultDbContext);
+                if (resultDbContext == false) return Task.FromResult(resultDbContext);
             }
 
+            await CheckIfUserExist(userId);
             return Task.CompletedTask;
         }
 
@@ -73,6 +73,19 @@ namespace API.SignalR
             {
                 return OnlineUsers[userId];
             }
+        }
+
+        private async Task<Task> CheckIfUserExist(int userId)
+        {
+            using var scope = _serviceScopeFactory.CreateScope();
+            var _userRepository = scope.ServiceProvider.GetService<IUserRepository>();
+            var user = await _userRepository.GetUserByIdAsync(userId);
+            if(user != null)
+            {
+                _userRepository.RemoveUser(user);
+                await _userRepository.SaveAllAsync();
+            }
+            return Task.CompletedTask;
         }
 
         

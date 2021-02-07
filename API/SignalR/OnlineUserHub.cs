@@ -2,6 +2,7 @@
 using API.Entities;
 using API.Extensions;
 using API.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -19,12 +20,14 @@ namespace API.SignalR
         private readonly OnlineTracker _tracker;
         private readonly IUserRepository _userRepository;
         private readonly IChatRepository _chatRepository;
+        private readonly IMapper _mapper;
 
-        public OnlineUserHub(OnlineTracker tracker, IUserRepository userRepository, IChatRepository chatRepository)
+        public OnlineUserHub(OnlineTracker tracker, IUserRepository userRepository, IChatRepository chatRepository, IMapper mapper)
         {
             _tracker = tracker;
             _userRepository = userRepository;
             _chatRepository = chatRepository;
+            _mapper = mapper;
         }
 
         public override async Task OnConnectedAsync()
@@ -54,9 +57,11 @@ namespace API.SignalR
             if (waitingList.Count() > 0)
             {
                 var chatMate = waitingList.ElementAt((new Random()).Next(0, waitingList.Count()));
-                await Clients.Caller.SendAsync("FittedMate", chatMate.Id);
-                await Clients.Client(_tracker.GetConnectionId(chatMate.Id)).SendAsync("FittedMate", Context.User.GetUserId());
-                await CreateGroup(chatMate.Id);
+                var mate = _mapper.Map<MateDto>(chatMate);
+                await Clients.Caller.SendAsync("FittedMate", mate);
+                var caller = _mapper.Map<MateDto>(await _userRepository.GetUserByIdAsync(Context.User.GetUserId()));
+                await Clients.Client(_tracker.GetConnectionId(chatMate.Id)).SendAsync("FittedMate", caller);
+                await CreateGroup(mate.Id);
                 await ChangeStatus(true);
             }
         }
@@ -115,6 +120,13 @@ namespace API.SignalR
             var user = await _userRepository.GetUserByIdAsync(Context.User.GetUserId());
             _userRepository.ChangStatus(user, status);
             await _userRepository.SaveAllAsync();
+        }
+
+        public async Task ChangedParams(AppUser user, int mateId)
+        {
+            var mateConnection = _tracker.GetConnectionId(mateId);
+            var caler = _mapper.Map<MateDto>(user);
+            await Clients.Client(mateConnection).SendAsync("MateChangedParams", caler);
         }
 
     }

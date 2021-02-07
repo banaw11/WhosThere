@@ -30,8 +30,8 @@
                     </div>
                     <div class="form-group row mt-4">
                         <label class="col-sm-3 label" col-form-label>Avatar :</label>
-                        <nb-user size="large" *ngIf="model.nick || model.picture" [name]='model?.nick' [picture]='model?.picture' [nbPopover]='imagePicker' nbPopoverAdjustment="noop" nbPopoverPlacement="bottom" required ></nb-user>
-                        <nb-user size="large" *ngIf="!model.nick && !model.picture" [nbPopover]='imagePicker' nbPopoverAdjustment="noop" nbPopoverPlacement="bottom"></nb-user>
+                        <nb-user size="large" *ngIf="model.nick || model.avatar" [name]='model?.nick' [picture]='model?.avatar' [nbPopover]='imagePicker' nbPopoverAdjustment="noop" nbPopoverPlacement="bottom" required ></nb-user>
+                        <nb-user size="large" *ngIf="!model.nick && !model.avatar" [nbPopover]='imagePicker' nbPopoverAdjustment="noop" nbPopoverPlacement="bottom"></nb-user>
                     </div>
                 </div>
                 <div class="col-sm-2">
