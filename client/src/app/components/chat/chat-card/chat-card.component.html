@@ -3,15 +3,22 @@
         [type]="msg.type"
         [message]="msg.message"
         [reply]="msg.reply"
-        [sender]="msg.name"
-        [avatar]="msg.avatar">
+        [sender]="mate?.nick"
+        [avatar]="mate?.avatar">
     </nb-chat-message>  
     <nb-chat-form (send)="sendMessage($event)" *ngIf='!(onlineUserService.mateDisconnected$ | async)'></nb-chat-form >
 </nb-chat>
-<div class="row mt-4 ml-2" *ngIf='onlineUserService.mateDisconnected$ | async'>
-    <nb-alert class="text-center col-12 col-sm-6 col-md-8" status="danger">Mate disconnected ! Do you want to chat with new one ?</nb-alert> 
-    <div class="col-6 col-md-4 ">
-        <button nbButton status="success" nbButton outline  size="small" shape="round" type="submit" (click)="joinToQueue()">Yes</button>
-        <button class="ml-2"nbButton status="danger" nbButton outline size="small" shape="round" (click)="userService.leave()" routerLink='/' routerLinkActive='active'>No</button>
+<div class="mt-4" *ngIf='onlineUserService.mateDisconnected$ | async' >
+    <nb-alert class="text-center col-sm-8 offset-md-2" status="danger" >Mate disconnected ! Do you want to chat with new one ?</nb-alert> 
+    <div class="row">
+        <div class="row col-sm-6 offset-md-1">
+            <button nbButton status="success" nbButton outline  size="medium" shape="round" type="submit" (click)="joinToQueue()">Yes</button>
+            <button class="ml-2"nbButton status="danger" nbButton outline size="medium" shape="round" (click)="userService.leave()" routerLink='/' routerLinkActive='active'>No</button>
+        </div>
+        <button class="col-sm-3 offset-md-1" nbButton status="info" outline size="medium" shape="round" nbPopover="cos" [nbPopover]='filtersForm' nbPopoverTrigger="noop" (click)="openPop()">Change filters</button> 
     </div>
 </div>
+
+<ng-template #filtersForm>
+    <app-filters-form (closePop)="closePop()"></app-filters-form>
+</ng-template>
