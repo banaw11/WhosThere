@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import { Component } from '@angular/core';
+import { FormBuilder,  Validators, } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NbMenuItem, NbMenuService } from '@nebular/theme';
+import { Avatar } from 'src/app/_models/avatar';
 import { UserService } from 'src/app/_services/user.service';
 
 interface Locations {
@@ -23,7 +24,11 @@ locations: Locations[] = [
   {value: '4', viewValue: 'Location 4'},
 ];
 model : any = {};
-  constructor(private fb: FormBuilder, private userService: UserService, private router: Router){}
+avatars: Avatar[] ;
+filtersMode: boolean = false;
+  constructor(private fb: FormBuilder, private userService: UserService, private router: Router, public menuService: NbMenuService){
+    this.userService.getAvatars().pipe().subscribe((avatars: Avatar[]) => this.avatars = avatars);
+  }
 
 myForm = this.fb.group({
     gender: ['', Validators.required],
@@ -39,7 +44,25 @@ myForm = this.fb.group({
       console.log(error);
     };
   }
+ 
+  changeAvatar(url: string){
+    this.model.picture = url;
+  }
 
+  addAge(){
+    if(this.model.minAge == null){
+      this.model.minAge = 1;
+    }
+    else{
+      this.model.minAge++;
+    }
+  }
+
+  subAge(){
+    if(this.model.minAge != null && this.model.minAge >0){
+      this.model.minAge--;
+    }
+  }
 
 
 }

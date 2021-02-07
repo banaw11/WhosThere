@@ -5,16 +5,12 @@
       <mat-icon matBadge="{{(onlineUserService.onlineUsers$| async)?.length}}" matBadgeColor="warn">people</mat-icon>
     </div>
   </div>
-  <div class="row col-md-3 offset-md-6" >
-    <nb-actions size="small">
+  <div class="row col-md-3 offset-md-6" *ngIf='userService.curentUser$ | async' >
+    <nb-actions size="tiny">
       <nb-action>
-        <nb-user name="Bartosz Nawrot" title="KnowAs"></nb-user>
+        <nb-user [name]='user.nick' [picture]='user.avatar'></nb-user>
       </nb-action>
-      <nb-action icon="arrow-ios-downward" mat-button [mat-menu-trigger-for]="menu">
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item>Nick</button>
-          <button mat-menu-item>Avatar</button>
-        </mat-menu>
+      <nb-action icon="arrow-ios-downward" [nbContextMenu]="userMenu" nbContextMenuTrigger="hover" nbContextMenuTag="user-menu">
       </nb-action>
     </nb-actions>
   </div>

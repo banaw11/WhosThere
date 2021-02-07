@@ -1,6 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { User } from 'src/app/_models/user';
 import { OnlineUserService } from 'src/app/_services/online-user.service';
 import { environment } from 'src/environments/environment';
 
@@ -16,7 +17,7 @@ export class ChatComponent implements OnInit {
   this.onlineUserService.stopHubConnection();
 }
 onlineUsers: number[] = [];
-fittedMateId: number;
+fittedMate: User;
 check: boolean = true;
 
   constructor(public onlineUserService: OnlineUserService, private router: Router) {
@@ -24,8 +25,8 @@ check: boolean = true;
       this.onlineUsers=users
       this.usersLoaded = Promise.resolve(true);
     });
-    this.onlineUserService.fittedMate$.pipe().subscribe((id: number)=>{
-      this.fittedMateId= id
+    this.onlineUserService.fittedMate$.pipe().subscribe((user: User)=>{
+      this.fittedMate = user
       this.check = false;
     })
    }

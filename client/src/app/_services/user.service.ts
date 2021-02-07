@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { User } from '../_models/user';
 import { map } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { OnlineUserService } from './online-user.service';
+import { Avatar } from '../_models/avatar';
 
 @Injectable({
   providedIn: 'root'
@@ -39,4 +40,12 @@ export class UserService {
     this.onlineUserService.stopHubConnection();
   }
 
+  changeUserParams(user: User){
+    this.http.post(this.baseUrl + 'users/change', user);
+    this.currentUserSource.next(user);
+  }
+
+  getAvatars(){
+    return this.http.get<Avatar[]>(this.baseUrl + "users/avatars");
+  }
 }

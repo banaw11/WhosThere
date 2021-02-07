@@ -3,6 +3,4 @@ export interface Message{
     type: string;
     reply: boolean;
     date: Date;
-    name: string;
-    avatar: string;
 }
