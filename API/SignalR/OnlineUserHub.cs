@@ -34,7 +34,7 @@ namespace API.SignalR
         {
             await _tracker.UserConnected(Context.User.GetUserId(), Context.ConnectionId);
             SendOnlineUsers();
-            waitingList = await _userRepository.GetUsersByParamsAsync(await _userRepository.GetUserByIdAsync(Context.User.GetUserId()));
+            
             FindChatMate();
         }
 
@@ -52,8 +52,9 @@ namespace API.SignalR
             SendOnlineUsers();
             await base.OnDisconnectedAsync(exception);
         }
-        private async void FindChatMate()
+        public async void FindChatMate()
         {
+            waitingList = await _userRepository.GetUsersByParamsAsync(await _userRepository.GetUserByIdAsync(Context.User.GetUserId()));
             if (waitingList.Count() > 0)
             {
                 var chatMate = waitingList.ElementAt((new Random()).Next(0, waitingList.Count()));
@@ -62,7 +63,11 @@ namespace API.SignalR
                 var caller = _mapper.Map<MateDto>(await _userRepository.GetUserByIdAsync(Context.User.GetUserId()));
                 await Clients.Client(_tracker.GetConnectionId(chatMate.Id)).SendAsync("FittedMate", caller);
                 await CreateGroup(mate.Id);
-                await ChangeStatus(true);
+                await ChangeStatus(true, mate.Id);
+            }
+            else
+            {
+                await ChangeStatus(false);
             }
         }
         private async void SendDisconnectInfo(AppUser user)
@@ -115,10 +120,15 @@ namespace API.SignalR
             var recipientConnection = _tracker.GetConnectionId(messageDto.RecipientId);
             await Clients.Client(recipientConnection).SendAsync("GetMessage", message);
         }
-        public async Task ChangeStatus(bool status)
+        public async Task ChangeStatus(bool status, int mateId=0)
         {
             var user = await _userRepository.GetUserByIdAsync(Context.User.GetUserId());
             _userRepository.ChangStatus(user, status);
+            if(mateId != 0)
+            {
+                var mate = await _userRepository.GetUserByIdAsync(mateId);
+                _userRepository.ChangStatus(mate, status);
+            }
             await _userRepository.SaveAllAsync();
         }
 
@@ -127,6 +137,21 @@ namespace API.SignalR
             var mateConnection = _tracker.GetConnectionId(mateId);
             var caler = _mapper.Map<MateDto>(user);
             await Clients.Client(mateConnection).SendAsync("MateChangedParams", caler);
+        }
+
+        public async Task EndChatSession(int mateId)
+        {
+            var caller = await _userRepository.GetUserByIdAsync(Context.User.GetUserId());
+            var mateConnection = _tracker.GetConnectionId(mateId);
+            var group = await GetGroupAsync();
+            if (group != null)
+            {
+                _userRepository.CleanGroupName(mateId);
+                await _userRepository.SaveAllAsync();
+                await DeleteGroup(group, caller);
+                await Clients.Client(mateConnection).SendAsync("MateDisconnected");
+            }
+
         }
 
     }

@@ -9,12 +9,14 @@ import { OnlineUserService } from './_services/online-user.service';
 })
 export class AppComponent implements OnInit {
   constructor (private onlineUserService: OnlineUserService, private router: Router){}
-  title = "Who's There";
+
   
   ngOnInit(): void {
   this.onlineUserService.stopHubConnection();
   this.router.navigateByUrl('/');
+  
   }
+  
   
   
 }

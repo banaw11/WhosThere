@@ -20,6 +20,8 @@ export class OnlineUserService {
   fittingMate$ = this.fittingMateSource.asObservable();
   mateDisconnectedSource = new BehaviorSubject<boolean>(false);
   mateDisconnected$ = this.mateDisconnectedSource.asObservable();
+  iDisconnextedSource = new BehaviorSubject<boolean>(false);
+  iDisconnected$ = this.iDisconnextedSource.asObservable();
   mateId : number;
   messages: Message[] = [];
 
@@ -42,7 +44,6 @@ export class OnlineUserService {
         this.fittedMateSource.next(mate);
         this.fittingMateSource.next(false);
         this.mateDisconnectedSource.next(false);
-        this.updateStatus();
       });
 
       this.hubConnection.on("MateDisconnected", () =>{
@@ -69,16 +70,21 @@ export class OnlineUserService {
 
   async joinToQueue(){
     this.fittingMateSource.next(true);
+    this.iDisconnextedSource.next(false);
     this.messages = [];
-    return this.hubConnection.invoke("ChangeStatus", false).catch(error => console.log(error));
+    return this.hubConnection.invoke("FindChatMate").catch(error => console.log(error));
   }
 
   async updateStatus(){
-    return this.hubConnection.invoke("ChangeStatus", true).catch(error => console.log(error));
+    return this.hubConnection.invoke("ChangeStatus", true, 0).catch(error => console.log(error));
   }
 
   async updateParams(mate: User){
     return this.hubConnection.invoke("ChangedParams", mate, this.mateId).catch(error => console.log(error));
+  }
+
+  async endChatSession(){
+    return this.hubConnection.invoke("EndChatSession", this.mateId).catch(error => console.log(error));
   }
 
   sendChangeInfo(mate: User){
@@ -88,14 +94,16 @@ export class OnlineUserService {
   }
 
   disconnectChat(){
-    this.mateDisconnectedSource.next(true);
+    this.endChatSession();
     this.fittedMateSource.next(null);
+    this.iDisconnextedSource.next(true);
   }
 
   stopHubConnection(){
     if(this.hubConnection){
       this.fittingMateSource.next(true);
       this.fittedMateSource.next(null);
+      this.iDisconnextedSource.next(false);
       this.messages = [];
       this.hubConnection.stop().catch(error => console.log(error));
     }
