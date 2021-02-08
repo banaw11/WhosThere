@@ -21,10 +21,11 @@ import { ChatComponent } from './components/chat/chat.component';
 import { HomeComponent } from './home/home.component';
 import { NbThemeModule, NbSidebarModule, NbLayoutModule, NbButtonModule, NbBadgeModule, NbIconModule, 
   NbActionsModule, NbCardModule, NbRadioModule, NbSelectModule, NbInputModule, NbSpinnerModule, NbChatModule, NbAlertModule, NbFormFieldModule, NbUserModule, 
-  NbMenuModule, NbWindowModule, NbContextMenuModule, NbToastrModule, NbPopoverModule, NbTabsetModule} from '@nebular/theme';
+  NbMenuModule, NbWindowModule, NbContextMenuModule, NbToastrModule, NbPopoverModule, NbTabsetModule, NbDialogModule} from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { ChatCardComponent } from './components/chat/chat-card/chat-card.component';
 import { FiltersFormComponent } from './components/forms/filters-form/filters-form.component';
+import { CloseDialogComponent } from './components/windows/close-dialog/close-dialog.component';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { FiltersFormComponent } from './components/forms/filters-form/filters-fo
     NickFormComponent,
     AvatarDialogComponent,
     NickDialogComponent,
-    FiltersFormComponent
+    FiltersFormComponent,
+    CloseDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -76,7 +78,8 @@ import { FiltersFormComponent } from './components/forms/filters-form/filters-fo
     NbContextMenuModule,
     NbToastrModule.forRoot(),
     NbPopoverModule,
-    NbTabsetModule
+    NbTabsetModule,
+    NbDialogModule.forRoot()
     
   ],
   exports: [

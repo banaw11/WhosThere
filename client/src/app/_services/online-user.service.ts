@@ -88,7 +88,8 @@ export class OnlineUserService {
   }
 
   disconnectChat(){
-    
+    this.mateDisconnectedSource.next(true);
+    this.fittedMateSource.next(null);
   }
 
   stopHubConnection(){
