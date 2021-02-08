@@ -41,8 +41,24 @@ export class UserService {
   }
 
   changeUserParams(user: User){
-    this.http.post(this.baseUrl + 'users/change', user);
-    this.currentUserSource.next(user);
+    return this.http.post(this.baseUrl + "users/change", user).pipe(
+      map((response: boolean) => {
+        if(response){
+          this.currentUserSource.next(user);
+          this.onlineUserService.sendChangeInfo(user);
+        } return response;
+      })
+    );
+  }
+
+  changePublicParams(user: User){
+    return this.http.post(this.baseUrl + "users/change", user).pipe(
+      map((response: boolean) => {
+        if(response){
+          this.currentUserSource.next(user);
+        }return response;
+      })
+    )
   }
 
   getAvatars(){

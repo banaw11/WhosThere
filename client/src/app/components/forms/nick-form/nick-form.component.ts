@@ -10,20 +10,30 @@ import { UserService } from 'src/app/_services/user.service';
 })
 export class NickFormComponent {
   user: User ;
-  model: any ={};
 
   constructor(public userService: UserService, private toastrService: NbToastrService) {
     this.userService.curentUser$.pipe().subscribe((user:User) => this.user = user);
    }
 
     changeNick(){
-      this.user.nick = this.model.nick;
-      this.userService.changeUserParams(this.user);
-      this.toastrService.show(
-        `Your new nick is: ${this.model.nick}`,
-        'Nick has been changed',
-        {position : NbGlobalPhysicalPosition.BOTTOM_RIGHT,
-           status: "primary", icon: "", duration: 2000}
-      );
+      this.userService.changeUserParams(this.user).pipe().subscribe((response: boolean) => {
+        if(response){
+          this.toastrService.show(
+            `Your new nick is: ${this.user.nick}`,
+            'Nick has been changed',
+            {position : NbGlobalPhysicalPosition.BOTTOM_RIGHT,
+               status: "primary", icon: "", duration: 2000}
+          );
+        }
+        else{
+          this.toastrService.show(
+            `Nick has not been changed`,
+            'Something went wrong',
+            {position : NbGlobalPhysicalPosition.BOTTOM_RIGHT,
+               status: "warning", icon: "alert-cricle", duration: 2000}
+          );
+        }
+      });
+      
     }
 }

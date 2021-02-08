@@ -3,13 +3,17 @@
         [type]="msg.type"
         [message]="msg.message"
         [reply]="msg.reply"
-        [sender]="mate?.nick"
         [avatar]="mate?.avatar">
     </nb-chat-message>  
-    <nb-chat-form (send)="sendMessage($event)" *ngIf='!(onlineUserService.mateDisconnected$ | async)'></nb-chat-form >
+    <nb-chat-form (send)="sendMessage($event)" *ngIf='!(onlineUserService.mateDisconnected$ | async) || (onlineUserService.iDisconnected$ |async)'></nb-chat-form >
 </nb-chat>
-<div class="mt-4" *ngIf='onlineUserService.mateDisconnected$ | async' >
-    <nb-alert class="text-center col-sm-8 offset-md-2" status="danger" >Mate disconnected ! Do you want to chat with new one ?</nb-alert> 
+<div class="mt-4" *ngIf='(onlineUserService.mateDisconnected$ | async) || (onlineUserService.iDisconnected$ |async)' >
+    <nb-alert *ngIf='(onlineUserService.mateDisconnected$ |async) && !(onlineUserService.iDisconnected$ | async)' class="text-center col-sm-8 offset-md-2" status="danger" >
+        Mate disconnected ! Do you want to chat with new one ?
+    </nb-alert> 
+    <nb-alert *ngIf='!(onlineUserService.mateDisconnected$ |async) && (onlineUserService.iDisconnected$ | async)' class="text-center col-sm-8 offset-md-2" status="warning" >
+        Chat ended ! Do you want to chat with new one ?
+    </nb-alert>
     <div class="row">
         <div class="row col-sm-6 offset-md-1">
             <button nbButton status="success" nbButton outline  size="medium" shape="round" type="submit" (click)="joinToQueue()">Yes</button>

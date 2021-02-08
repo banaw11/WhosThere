@@ -1,7 +1,7 @@
 <form #nickForm="ngForm" class="form-horizontal" (ngSubmit)="changeNick()"  autocomplete="off">
     <div class="form-group row mt-5">
         <label class="col-6 col-sm-3 label" col-form-label>Nick :</label>
-        <input class="col-6 col-sm-3" nbInput shape="semi-round" status="primary" name="nick" [(ngModel)]="model.nick"  [placeholder]='user?.nick' required minlength=4>
+        <input class="col-6 col-sm-3" nbInput shape="semi-round" status="primary" name="nick" [(ngModel)]="user.nick"  [placeholder]='user?.nick' required minlength=4>
     </div>
     <div class="row  col-6 col-sm-3 offset-md-3 mt-4">
         <button class="form-group" nbButton outline shape="round" status="success" type="submit" size="small"  [disabled]="!nickForm.valid">Save</button>

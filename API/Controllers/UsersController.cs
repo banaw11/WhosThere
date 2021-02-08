@@ -35,7 +35,9 @@ namespace API.Controllers
             return new UserDto
             {
                 Id = user.Id,
-                Token = _tokenService.CreateToken(user)
+                Token = _tokenService.CreateToken(user),
+                Avatar = user.Avatar,
+                Nick = user.Nick
             };
         }
 
@@ -45,6 +47,31 @@ namespace API.Controllers
             var users = await _userRepository.GetUsersAsync();
 
             return Ok(users.ToList().Count);
+        }
+
+        [HttpGet("avatars")]
+        public AvatarDto[] GetAvatars()
+        {
+            return LoadAvatars();
+        }
+
+        [HttpPost("change")]
+        public async Task<ActionResult> ChangeUserParams(AppUser user)
+        {
+            _userRepository.Update(user);
+            var result = await _userRepository.SaveAllAsync();
+            return Ok(result);
+        }
+
+        private AvatarDto[] LoadAvatars()
+        {
+            AvatarDto[] avatars = new AvatarDto[9];
+            for (int i = 0; i < 9; i++)
+            {
+                AvatarDto avatar = new AvatarDto { Id = i, Url = "https://randomuser.me/api/portraits/lego/" + i + ".jpg" };
+                avatars[i] = avatar;
+            }
+            return avatars;
         }
     }
 }

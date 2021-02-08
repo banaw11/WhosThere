@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { Mate } from '../_models/mate';
 import { Message } from '../_models/message';
 import { User } from '../_models/user';
 
@@ -14,12 +14,14 @@ export class OnlineUserService {
   private hubConnection: HubConnection;
   private onlineUsersSource = new BehaviorSubject<number[]>([]);
   onlineUsers$ = this.onlineUsersSource.asObservable();
-  private fittedMateSource = new BehaviorSubject<User>(null);
+  private fittedMateSource = new BehaviorSubject<Mate>(null);
   fittedMate$ = this.fittedMateSource.asObservable();
   private fittingMateSource = new BehaviorSubject<boolean>(true);
   fittingMate$ = this.fittingMateSource.asObservable();
   mateDisconnectedSource = new BehaviorSubject<boolean>(false);
   mateDisconnected$ = this.mateDisconnectedSource.asObservable();
+  iDisconnextedSource = new BehaviorSubject<boolean>(false);
+  iDisconnected$ = this.iDisconnextedSource.asObservable();
   mateId : number;
   messages: Message[] = [];
 
@@ -37,12 +39,11 @@ export class OnlineUserService {
         this.onlineUsersSource.next(iDs);
       });
 
-      this.hubConnection.on("FittedMate", (mate: User) =>{
+      this.hubConnection.on("FittedMate", (mate: Mate) =>{
         this.mateId = mate.id;
         this.fittedMateSource.next(mate);
         this.fittingMateSource.next(false);
         this.mateDisconnectedSource.next(false);
-        this.updateStatus();
       });
 
       this.hubConnection.on("MateDisconnected", () =>{
@@ -52,6 +53,10 @@ export class OnlineUserService {
 
       this.hubConnection.on("GetMessage", (message: Message) =>{
          this.messages.push(message);
+      });
+
+      this.hubConnection.on("MateChangedParams", (mate: Mate) => {
+        this.fittedMateSource.next(mate);
       })
       
   }
@@ -65,18 +70,40 @@ export class OnlineUserService {
 
   async joinToQueue(){
     this.fittingMateSource.next(true);
+    this.iDisconnextedSource.next(false);
     this.messages = [];
-    return this.hubConnection.invoke("ChangeStatus", false).catch(error => console.log(error));
+    return this.hubConnection.invoke("FindChatMate").catch(error => console.log(error));
   }
 
   async updateStatus(){
-    return this.hubConnection.invoke("ChangeStatus", true).catch(error => console.log(error));
+    return this.hubConnection.invoke("ChangeStatus", true, 0).catch(error => console.log(error));
+  }
+
+  async updateParams(mate: User){
+    return this.hubConnection.invoke("ChangedParams", mate, this.mateId).catch(error => console.log(error));
+  }
+
+  async endChatSession(){
+    return this.hubConnection.invoke("EndChatSession", this.mateId).catch(error => console.log(error));
+  }
+
+  sendChangeInfo(mate: User){
+    if(this.fittedMate$ != null){
+      this.updateParams(mate);
+    }
+  }
+
+  disconnectChat(){
+    this.endChatSession();
+    this.fittedMateSource.next(null);
+    this.iDisconnextedSource.next(true);
   }
 
   stopHubConnection(){
     if(this.hubConnection){
       this.fittingMateSource.next(true);
       this.fittedMateSource.next(null);
+      this.iDisconnextedSource.next(false);
       this.messages = [];
       this.hubConnection.stop().catch(error => console.log(error));
     }

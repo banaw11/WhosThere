@@ -1,0 +1,12 @@
+<nb-card>
+    <nb-card-header>
+        <h6>End Conversation</h6>
+    </nb-card-header>
+    <nb-card-body>
+        Please, confirm ending the conversation.
+    </nb-card-body>
+    <nb-card-footer>
+        <button nbButton hero status="success" shape="round" size="small" (click)="submit(true)">End</button>
+        <button class="ml-2" nbButton hero status="warning" shape="round" size="small" (click)="submit(false)" >Cancel</button>
+    </nb-card-footer>
+</nb-card>
