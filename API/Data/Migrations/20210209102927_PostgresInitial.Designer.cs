@@ -4,42 +4,52 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210131150938_NewMigration_04")]
-    partial class NewMigration_04
+    [Migration("20210209102927_PostgresInitial")]
+    partial class PostgresInitial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "5.0.1");
+                .UseIdentityByDefaultColumns()
+                .HasAnnotation("Relational:MaxIdentifierLength", 63)
+                .HasAnnotation("ProductVersion", "5.0.2");
 
             modelBuilder.Entity("API.Entities.AppUser", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer")
+                        .UseIdentityByDefaultColumn();
+
+                    b.Property<string>("Avatar")
+                        .HasColumnType("text");
 
                     b.Property<string>("Gender")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("GroupName")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<bool>("IsChatting")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Location")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<int>("MinAge")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Nick")
+                        .HasColumnType("text");
 
                     b.Property<string>("SelectedGender")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -49,13 +59,13 @@ namespace API.Data.Migrations
             modelBuilder.Entity("API.Entities.Group", b =>
                 {
                     b.Property<string>("Name")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("CallerConnectionID")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("OtherConnectionID")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.HasKey("Name");
 

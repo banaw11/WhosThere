@@ -51,16 +51,6 @@ export class UserService {
     );
   }
 
-  changePublicParams(user: User){
-    return this.http.post(this.baseUrl + "users/change", user).pipe(
-      map((response: boolean) => {
-        if(response){
-          this.currentUserSource.next(user);
-        }return response;
-      })
-    )
-  }
-
   getAvatars(){
     return this.http.get<Avatar[]>(this.baseUrl + "users/avatars");
   }

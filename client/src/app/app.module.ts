@@ -14,7 +14,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatIconModule } from '@angular/material/icon';
 import { MatBadgeModule } from '@angular/material/badge';
-import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { HttpClientModule } from '@angular/common/http';
 import { ChatComponent } from './components/chat/chat.component';
@@ -24,7 +23,6 @@ import { NbThemeModule, NbSidebarModule, NbLayoutModule, NbButtonModule, NbBadge
   NbMenuModule, NbWindowModule, NbContextMenuModule, NbToastrModule, NbPopoverModule, NbTabsetModule, NbDialogModule} from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { ChatCardComponent } from './components/chat/chat-card/chat-card.component';
-import { FiltersFormComponent } from './components/forms/filters-form/filters-form.component';
 import { CloseDialogComponent } from './components/windows/close-dialog/close-dialog.component';
 
 
@@ -40,7 +38,6 @@ import { CloseDialogComponent } from './components/windows/close-dialog/close-di
     NickFormComponent,
     AvatarDialogComponent,
     NickDialogComponent,
-    FiltersFormComponent,
     CloseDialogComponent
   ],
   imports: [

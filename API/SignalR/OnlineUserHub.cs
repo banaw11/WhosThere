@@ -35,7 +35,7 @@ namespace API.SignalR
             await _tracker.UserConnected(Context.User.GetUserId(), Context.ConnectionId);
             SendOnlineUsers();
             
-            FindChatMate();
+            await FindChatMate();
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)
@@ -52,7 +52,7 @@ namespace API.SignalR
             SendOnlineUsers();
             await base.OnDisconnectedAsync(exception);
         }
-        public async void FindChatMate()
+        public async Task FindChatMate()
         {
             waitingList = await _userRepository.GetUsersByParamsAsync(await _userRepository.GetUserByIdAsync(Context.User.GetUserId()));
             if (waitingList.Count() > 0)

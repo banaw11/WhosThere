@@ -64,5 +64,9 @@ myForm = this.fb.group({
     }
   }
 
+  openFilters(){
+    this.filtersMode =!this.filtersMode;
+  }
+
 
 }
