@@ -1,68 +1,63 @@
 <nb-card #formCard size="medium" accent="primary">
     <nb-card-header class="text-center" ><h4>Join to chat !</h4></nb-card-header>
     <nb-card-body>
-        <form #joinForm="ngForm" class="form-horizontal" autocomplete="off">
-            <div class="row">
-                <div class="col-sm-4">
-                    <div class="form-group row">
-                        <label class="col-sm-3 label" col-form-label >I am a :</label>
-                        <div class="col-sm-6">
-                            <nb-radio-group class="" id="gender" name="gender" status="primary" [(ngModel)]="model.gender" required>
-                                <nb-radio value="male" >Male</nb-radio>
-                                <nb-radio value="female">Female</nb-radio>
-                            </nb-radio-group>
-                        </div>
+        <div fxLayoutAlign="end start">
+            <nb-icon icon="funnel-outline" nbButton status="primary" (click)="openFilters()"></nb-icon>
+        </div>
+        <form #joinForm="ngForm"  autocomplete="off" >
+            <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign.gt-xs="space-around center">
+                
+                <div fxLayout="column" fxLayoutAlign="space-arund " >
+                    <div class="form-group" fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
+                        <label class="label" col-form-label >I am a :</label>
+                        <nb-radio-group id="gender" name="gender" status="primary" [(ngModel)]="model.gender" required>
+                            <nb-radio value="male" >Male</nb-radio>
+                            <nb-radio value="female">Female</nb-radio>
+                        </nb-radio-group>
                     </div>
-                    <div class="form-group row">
-                        <label class="col-sm-3 label" col-form-label>Looking for :</label>
-                        <div class="col-sm-6">
+                    <div class="form-group" fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
+                        <label class="label" col-form-label>Looking for :</label>
                             <nb-radio-group name="selectedGender" status="primary" [(ngModel)]="model.selectedGender" required>
                                 <nb-radio value="male" >Male</nb-radio>
                                 <nb-radio value="female" >Female</nb-radio>
                             </nb-radio-group>
-                        </div>
                     </div>
                 </div>
-                <div class="col-sm-6">
-                    <div class="form-group row">
-                        <label class="col-sm-3 label" col-form-label>Nick :</label>
-                        <input class="col-6 col-sm-3" nbInput shape="semi-round" status="primary" name="nick" [(ngModel)]="model.nick"  placeholder="Nick" max=10 required minlength=4 maxlength=10>
+                    
+                <div fxLayout="column"  fxLayoutAlign="space-between ">
+                    <div class="form-group" fxlayout="row" fxLayoutAlign="space-around center" fxLayoutGap.gt-xs="10px">
+                        <label class="label" col-form-label>Nick :</label>
+                        <input nbInput shape="semi-round"  status="primary" name="nick" [(ngModel)]="model.nick"  placeholder="Nick" max=10 required minlength=4 maxlength=10>
                     </div>
-                    <div class="form-group row mt-4">
-                        <label class="col-sm-3 label" col-form-label>Avatar :</label>
+                    <div class="form-group" fxLayout="row" fxLayoutAlign="space-around center" >
+                        <label class="label" col-form-label>Avatar :</label>
                         <nb-user size="large" *ngIf="model.nick || model.avatar" [name]='model?.nick' [picture]='model?.avatar' [nbPopover]='imagePicker' nbPopoverAdjustment="noop" nbPopoverPlacement="bottom" required ></nb-user>
                         <nb-user size="large" *ngIf="!model.nick && !model.avatar" [nbPopover]='imagePicker' nbPopoverAdjustment="noop" nbPopoverPlacement="bottom"></nb-user>
                     </div>
                 </div>
-                <div class="col-sm-2">
-                    <nb-icon icon="funnel-outline" nbButton status="primary" (click)="openFilters()"></nb-icon>
-                </div>
+                
             </div>
-            <div class="form-group" *ngIf="filtersMode">
-                <div class="form-group row">
-                    <label class="col-sm-3 label" col-form-label>Location :</label>
-                    <div class="col-sm-9">
+            <div class="form-group" fxLayout="column" *ngIf="filtersMode" fxLayoutAlign="space-between ">
+                <div class="form-group" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+                    <label class="label" col-form-label>Location :</label>
                         <nb-select  name="location" status="primary" [(ngModel)]="model.location" placeholder="From">
                             <nb-option *ngFor="let location of locations" [value]="location.value">{{location.viewValue}}</nb-option>
                         </nb-select>
-                    </div>
                 </div>
-                <div class="form-group row">
-                    <label class="col-sm-3 label" col-form-label>Enter min age :</label>
-                    <div class="col-sm-9 short">
-                        <input class="col-sm-3 " nbInput shape="semi-round" status="primary" name="minAge"  [(ngModel)]="model.minAge" disabled>
+                <div class="form-group" fxLayout="row" fxLayout.xs="column" fxLayoutAlign.gt-xs="start center" fxLayoutGap="10px">
+                    <label class="label" col-form-label>Enter min age :</label>
+                    <div fxLayout.xs="row" fxLayoutAlign="center center">
+                        <input fxFlex="20" nbInput shape="semi-round" status="primary" name="minAge"  [(ngModel)]="model.minAge" disabled>
+                         <nb-actions fxFlex ="80">
+                            <nb-action icon="plus-circle-outline" (click)="addAge()"></nb-action>
+                            <nb-action icon="minus-circle-outline" (click)="subAge()"></nb-action>
+                        </nb-actions>
                     </div>
-                    <nb-actions>
-                        <nb-action icon="plus-circle-outline" (click)="addAge()"></nb-action>
-                        <nb-action icon="minus-circle-outline" (click)="subAge()"></nb-action>
-                    </nb-actions>
                 </div>
             </div>
             
-            <div class="form-group row">
-                <div class="offset-sm-6 col-sm-3">
-                    <button class="form-group" nbButton shape="round" status="success" type="submit" (click)="join()"  [disabled]="!joinForm.valid">Join</button>
-                </div>
+            <div class="form-group" fxLayout="column" fxLayoutAlign="center center">
+                <button  nbButton shape="round" status="success" type="submit" (click)="join()"  [disabled]="!joinForm.valid">Join</button>
             </div>
         </form>
         

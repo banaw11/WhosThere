@@ -16,6 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatSelectModule } from '@angular/material/select';
 import { HttpClientModule } from '@angular/common/http';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { ChatComponent } from './components/chat/chat.component';
 import { HomeComponent } from './home/home.component';
 import { NbThemeModule, NbSidebarModule, NbLayoutModule, NbButtonModule, NbBadgeModule, NbIconModule, 
@@ -24,6 +25,7 @@ import { NbThemeModule, NbSidebarModule, NbLayoutModule, NbButtonModule, NbBadge
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { ChatCardComponent } from './components/chat/chat-card/chat-card.component';
 import { CloseDialogComponent } from './components/windows/close-dialog/close-dialog.component';
+import { from } from 'rxjs';
 
 
 @NgModule({
@@ -76,7 +78,8 @@ import { CloseDialogComponent } from './components/windows/close-dialog/close-di
     NbToastrModule.forRoot(),
     NbPopoverModule,
     NbTabsetModule,
-    NbDialogModule.forRoot()
+    NbDialogModule.forRoot(),
+    FlexLayoutModule
     
   ],
   exports: [
