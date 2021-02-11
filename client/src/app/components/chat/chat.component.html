@@ -1,6 +1,6 @@
-<nb-card class="col-md-10 offset-md-1" *ngIf='usersLoaded | async'>
-    <nb-card-header [nbSpinner]='onlineUserService.fittingMate$ | async ' nbSpinnerStatus="danger" nbSpinnerSize="medium" nbSpinnerMessage="I'm looking for available people ...">
-        <nb-actions class="col-2 offset-md-10" size="medium" *ngIf='!(onlineUserService.fittingMate$ | async )'>
+<nb-card fxLayout="column" *ngIf='usersLoaded | async'>
+    <nb-card-header [nbSpinner]='(onlineUserService.fittingMate$ | async )' nbSpinnerStatus="danger" nbSpinnerSize="medium" nbSpinnerMessage="I'm looking for available people ...">
+        <nb-actions fxLayout="row" fxLayoutAlign="end stretch" size="small" *ngIf='!(onlineUserService.fittingMate$ | async )'>
             <nb-action icon="close-square-outline" type="nbButton" status="danger"  (click)="openDialog()" nbPopover="Click to end conversation" nbPopoverTrigger="hint" nbPopoverPlacement="top"></nb-action>
         </nb-actions>
     </nb-card-header>

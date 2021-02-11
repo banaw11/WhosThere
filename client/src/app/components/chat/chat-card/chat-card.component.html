@@ -7,15 +7,17 @@
     </nb-chat-message>  
     <nb-chat-form (send)="sendMessage($event)" *ngIf='!(onlineUserService.mateDisconnected$ | async) || !(onlineUserService.iDisconnected$ |async)'></nb-chat-form >
 </nb-chat>
-<div class="mt-4" *ngIf='(onlineUserService.mateDisconnected$ | async) || (onlineUserService.iDisconnected$ |async)' >
-    <nb-alert *ngIf='(onlineUserService.mateDisconnected$ |async) && !(onlineUserService.iDisconnected$ | async)' class="text-center col-sm-8 offset-md-2" status="danger" >
+<div class="mt-2" fxLayout="column" fxLayoutAlign="start center"  >
+    <nb-alert class="text-center" status="danger"
+    *ngIf='(onlineUserService.mateDisconnected$ |async) && !(onlineUserService.iDisconnected$ | async)'>
         Mate disconnected ! Do you want to chat with new one ?
     </nb-alert> 
-    <nb-alert *ngIf='!(onlineUserService.mateDisconnected$ |async) && (onlineUserService.iDisconnected$ | async)' class="text-center col-sm-8 offset-md-2" status="warning" >
+    <nb-alert  class="text-center" status="warning" 
+    *ngIf='!(onlineUserService.mateDisconnected$ |async) && (onlineUserService.iDisconnected$ | async)'>
         Chat ended ! Do you want to chat with new one ?
     </nb-alert>
-     <div class="row col-sm-6 offset-md-1">
+     <div fxLayout="row" fxFill="100" fxLayoutAlign="space-around">
         <button nbButton status="success" nbButton outline  size="medium" shape="round" type="submit" (click)="joinToQueue()">Yes</button>
-        <button class="ml-2"nbButton status="danger" nbButton outline size="medium" shape="round" (click)="userService.leave()" routerLink='/' routerLinkActive='active'>No</button>
+        <button nbButton status="danger" nbButton outline size="medium" shape="round" (click)="userService.leave()" routerLink='/' routerLinkActive='active'>No</button>
     </div>
 </div>
