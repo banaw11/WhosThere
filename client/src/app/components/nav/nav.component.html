@@ -1,9 +1,9 @@
-<div fxLayout="row" fxLayoutAlign="space-around center" >
+<div fxLayout="row" fxLayoutAlign="space-between center">
   <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
     <button nbButton (click)="backToHomePage()" routerLink='/' routerLinkActive='active' status="primary" >Who's There</button>
-    <mat-icon matBadge="{{((onlineUserService.onlineUsers$| async)?.length)-1}}" matBadgeColor="warn">people</mat-icon>
+    <mat-icon matBadge="{{((onlineUserService.onlineUsers$| async)?.length)-1}}" *ngIf='userService.curentUser$ | async' matBadgeColor="warn">people</mat-icon>
   </div>
-  <div fxLayout="row" >
+  <div fxLayout="row" *ngIf='userService.curentUser$ | async' >
     <nb-actions size="tiny">
       <nb-action>
         <nb-user [name]='user?.nick' [picture]='user?.avatar'></nb-user>

@@ -1,12 +1,9 @@
-<div fxLayout="column" fxLayoutAlign="space-arround center">
-    <nb-user [name]='user?.nick' [picture]='user?.avatar' size="large"></nb-user>
-    <div fxLayour="column">
+<div fxLayout="column" fxLayoutAlign="space-between stretch">
         <label class="label" col-form-label>Avatar :</label>
-        <div fxLayout="row">
-            <button  nbButton outline shape="round" status="info" size="tiny"
-            *ngFor="let avatar of avatars" (click)="changeAvatar(avatar?.url)">
-                <nb-user size="medium" [picture]='avatar?.url' onlyPicture ></nb-user>
-            </button>
-        </div>
-    </div>
+        <nb-user [name]='user?.nick' [picture]='user?.avatar' size="large" [nbPopover]='imagePicker' nbPopoverAdjustment="noop" nbPopoverPlacement="bottom"></nb-user>
 </div>
+<ng-template #imagePicker>
+    <div class="row popover-card">
+            <nb-user *ngFor="let avatar of avatars" (click)="changeAvatar(avatar.url)" class="mt-1" size="medium" [picture]='avatar?.url' onlyPicture  ></nb-user>
+    </div>
+</ng-template>
