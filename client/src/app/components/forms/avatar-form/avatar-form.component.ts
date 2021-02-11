@@ -11,13 +11,23 @@ import { UserService } from 'src/app/_services/user.service';
 })
 export class AvatarFormComponent implements OnInit {
   user: User ;
-avatars: Avatar[] ;
+avatars: Avatar[] = [
+  {id: 0, url : "https://randomuser.me/api/portraits/lego/0.jpg" },
+  {id: 1, url : "https://randomuser.me/api/portraits/lego/1.jpg" },
+  {id: 2, url : "https://randomuser.me/api/portraits/lego/2.jpg" },
+  {id: 3, url : "https://randomuser.me/api/portraits/lego/3.jpg" },
+  {id: 4, url : "https://randomuser.me/api/portraits/lego/4.jpg" },
+  {id: 5, url : "https://randomuser.me/api/portraits/lego/5.jpg" },
+  {id: 6, url : "https://randomuser.me/api/portraits/lego/6.jpg" },
+  {id: 7, url : "https://randomuser.me/api/portraits/lego/7.jpg" },
+  {id: 8, url : "https://randomuser.me/api/portraits/lego/8.jpg" }
+] ;
   constructor(public userService: UserService, private toastrService: NbToastrService) {
     this.userService.curentUser$.pipe().subscribe((user: User) => this.user = user);
    }
 
   ngOnInit(): void {
-     this.userService.getAvatars().pipe().subscribe((avatars: Avatar[]) => this.avatars = avatars);
+     //this.userService.getAvatars().pipe().subscribe((avatars: Avatar[]) => this.avatars = avatars);
   }
 
   changeAvatar(url: string){

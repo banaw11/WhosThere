@@ -1,6 +1,6 @@
-<nb-card #formCard size="medium" accent="primary">
+<nb-card #formCard [size]='size' accent="primary">
     <nb-card-header class="text-center" ><h4>Join to chat !</h4></nb-card-header>
-    <nb-card-body>
+    <nb-card-body  fxLayout="column" fxLayoutAlign="center stretch">
         <div fxLayoutAlign="end start">
             <nb-icon icon="funnel-outline" nbButton status="primary" (click)="openFilters()"></nb-icon>
         </div>

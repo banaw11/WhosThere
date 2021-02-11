@@ -1,16 +1,14 @@
-<div class="row" >
-  <div class="row col-md-3">
+<div fxLayout="row" fxLayoutAlign="space-around center" >
+  <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
     <button nbButton (click)="backToHomePage()" routerLink='/' routerLinkActive='active' status="primary" >Who's There</button>
-    <div class="col-sm-3 mt-2" *ngIf='userService.curentUser$ | async'  >
-      <mat-icon matBadge="{{((onlineUserService.onlineUsers$| async)?.length)-1}}" matBadgeColor="warn">people</mat-icon>
-    </div>
+    <mat-icon matBadge="{{((onlineUserService.onlineUsers$| async)?.length)-1}}" matBadgeColor="warn">people</mat-icon>
   </div>
-  <div class="row col-md-3 offset-md-6" *ngIf='userService.curentUser$ | async' >
+  <div fxLayout="row" >
     <nb-actions size="tiny">
       <nb-action>
-        <nb-user [name]='user.nick' [picture]='user.avatar'></nb-user>
+        <nb-user [name]='user?.nick' [picture]='user?.avatar'></nb-user>
       </nb-action>
-      <nb-action icon="arrow-ios-downward" [nbContextMenu]="userMenu" nbContextMenuTrigger="hover" nbContextMenuTag="user-menu">
+      <nb-action icon="arrow-ios-downward" [nbContextMenu]="userMenu" nbContextMenuTag="user-menu">
       </nb-action>
     </nb-actions>
   </div>

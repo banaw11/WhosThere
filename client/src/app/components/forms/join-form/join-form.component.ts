@@ -26,6 +26,7 @@ locations: Locations[] = [
 model : any = {};
 avatars: Avatar[] ;
 filtersMode: boolean = false;
+size: string = "medium";
   constructor(private fb: FormBuilder, private userService: UserService, private router: Router, public menuService: NbMenuService){
     this.userService.getAvatars().pipe().subscribe((avatars: Avatar[]) => this.avatars = avatars);
   }
@@ -66,6 +67,12 @@ myForm = this.fb.group({
 
   openFilters(){
     this.filtersMode =!this.filtersMode;
+    if(this.filtersMode){
+      this.size="large";
+    }
+    else{
+      this.size="medium";
+    }
   }
 
 
